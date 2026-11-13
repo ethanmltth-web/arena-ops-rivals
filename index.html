@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arena Ops — Rivals Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- TITLE -->
+    <section id="screen-title" class="screen active">
+      <div class="title-bg"></div>
+      <div class="title-content">
+        <p class="eyebrow">Esports Franchise Simulator</p>
+        <h1>ARENA OPS</h1>
+        <p class="tagline">Build a dynasty in Roblox Rivals. Sign stars. Train. Win the league.</p>
+        <div class="title-actions">
+          <button class="btn btn-primary" id="btn-new-game">New Career</button>
+          <button class="btn btn-ghost" id="btn-continue" disabled>Continue</button>
+        </div>
+        <p class="title-note">Rivals available now · Valorant &amp; Rocket League coming soon</p>
+      </div>
+    </section>
+
+    <!-- SETUP -->
+    <section id="screen-setup" class="screen">
+      <div class="panel setup-panel">
+        <h2>Found Your Org</h2>
+        <p class="muted">Pick a name and colors. You’ll manage a Roblox Rivals roster in the Rivals Pro League.</p>
+        <label>Organization Name
+          <input type="text" id="team-name-input" maxlength="24" placeholder="e.g. Neon Drift" value="Neon Drift" />
+        </label>
+        <label>Primary Color
+          <input type="color" id="team-color-input" value="#00e5a8" />
+        </label>
+        <div class="game-pick">
+          <span class="label">Title</span>
+          <div class="game-cards">
+            <button class="game-card selected" data-game="rivals" type="button">
+              <strong>Roblox Rivals</strong>
+              <span>Active</span>
+            </button>
+            <button class="game-card locked" data-game="valorant" type="button" disabled>
+              <strong>Valorant</strong>
+              <span>Coming soon</span>
+            </button>
+            <button class="game-card locked" data-game="rocketleague" type="button" disabled>
+              <strong>Rocket League</strong>
+              <span>Coming soon</span>
+            </button>
+          </div>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-ghost" id="btn-setup-back">Back</button>
+          <button class="btn btn-primary" id="btn-start-career">Start Career</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HUB -->
+    <section id="screen-hub" class="screen">
+      <header class="topbar">
+        <div class="brand">
+          <span class="logo-mark" id="team-mark"></span>
+          <div>
+            <strong id="hub-team-name">Team</strong>
+            <small>Rivals Pro League · Week <span id="hub-week">1</span>/<span id="hub-season-weeks">14</span></small>
+          </div>
+        </div>
+        <div class="resources">
+          <div class="stat-chip"><span>Budget</span><strong id="hub-budget">$0</strong></div>
+          <div class="stat-chip"><span>Record</span><strong id="hub-record">0–0</strong></div>
+          <div class="stat-chip"><span>Morale</span><strong id="hub-morale">—</strong></div>
+        </div>
+      </header>
+
+      <nav class="tabs" id="main-tabs">
+        <button class="tab active" data-tab="office">Office</button>
+        <button class="tab" data-tab="roster">Roster</button>
+        <button class="tab" data-tab="agency">Free Agency</button>
+        <button class="tab" data-tab="training">Training</button>
+        <button class="tab" data-tab="league">League</button>
+        <button class="tab" data-tab="match">Match Day</button>
+        <button class="tab" data-tab="finances">Finances</button>
+      </nav>
+
+      <main class="hub-main">
+        <!-- OFFICE -->
+        <div class="tab-panel active" id="tab-office">
+          <div class="grid-2">
+            <article class="card">
+              <h3>Manager Desk</h3>
+              <p id="office-brief" class="muted"></p>
+              <ul class="checklist" id="office-todos"></ul>
+              <div class="row-actions">
+                <button class="btn btn-primary" id="btn-advance-week">Advance Week</button>
+                <button class="btn btn-ghost" id="btn-save">Save Game</button>
+              </div>
+              <p class="tiny muted" id="save-status"></p>
+            </article>
+            <article class="card">
+              <h3>This Week</h3>
+              <div id="office-fixture" class="fixture-box"></div>
+              <h4>Quick Stats</h4>
+              <div class="mini-stats" id="office-quick"></div>
+            </article>
+          </div>
+        </div>
+
+        <!-- ROSTER -->
+        <div class="tab-panel" id="tab-roster">
+          <div class="panel-head">
+            <h3>Active Roster <span class="badge" id="roster-count">0/5</span></h3>
+            <p class="muted">Starting five only. Bench/reserves count against payroll but don’t play.</p>
+          </div>
+          <div id="roster-list" class="player-grid"></div>
+        </div>
+
+        <!-- FREE AGENCY -->
+        <div class="tab-panel" id="tab-agency">
+          <div class="panel-head">
+            <h3>Free Agency Market</h3>
+            <div class="filters">
+              <button class="chip active" data-filter="all">All</button>
+              <button class="chip" data-filter="signature">Signature Stars</button>
+              <button class="chip" data-filter="affordable">Affordable</button>
+            </div>
+          </div>
+          <div id="agency-list" class="player-grid"></div>
+        </div>
+
+        <!-- TRAINING -->
+        <div class="tab-panel" id="tab-training">
+          <div class="panel-head">
+            <h3>Training Facility</h3>
+            <p class="muted">Improve stats, restore energy, or run team drills. Training costs money and energy.</p>
+          </div>
+          <div class="grid-2">
+            <article class="card">
+              <h4>Select Player</h4>
+              <select id="train-player-select"></select>
+              <div id="train-player-preview" class="player-preview"></div>
+            </article>
+            <article class="card">
+              <h4>Session</h4>
+              <div class="train-options" id="train-options"></div>
+              <button class="btn btn-primary" id="btn-run-training" disabled>Run Session</button>
+              <p class="tiny muted" id="train-result"></p>
+            </article>
+          </div>
+        </div>
+
+        <!-- LEAGUE -->
+        <div class="tab-panel" id="tab-league">
+          <div class="grid-2">
+            <article class="card">
+              <h3>Standings</h3>
+              <table class="table" id="standings-table">
+                <thead>
+                  <tr><th>#</th><th>Team</th><th>W</th><th>L</th><th>Diff</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </article>
+            <article class="card">
+              <h3>Schedule</h3>
+              <div id="schedule-list" class="schedule-list"></div>
+            </article>
+          </div>
+        </div>
+
+        <!-- MATCH -->
+        <div class="tab-panel" id="tab-match">
+          <div id="match-pre" class="card">
+            <h3>Match Day</h3>
+            <div id="match-preview"></div>
+            <div class="tactics">
+              <label>Strategy
+                <select id="match-tactic">
+                  <option value="balanced">Balanced</option>
+                  <option value="aggressive">Aggressive (aim/mechanics +)</option>
+                  <option value="defensive">Defensive (game sense/teamwork +)</option>
+                  <option value="pace">High Pace (movement +)</option>
+                </select>
+              </label>
+            </div>
+            <button class="btn btn-primary" id="btn-play-match">Play Match</button>
+          </div>
+          <div id="match-live" class="card hidden">
+            <h3 id="match-scoreline">vs</h3>
+            <div id="match-log" class="match-log"></div>
+            <button class="btn btn-primary hidden" id="btn-match-done">Back to Office</button>
+          </div>
+          <div id="match-off" class="card hidden">
+            <h3>No Match This Week</h3>
+            <p class="muted">You’re on a bye or the season hasn’t started a fixture yet. Advance the week from Office.</p>
+          </div>
+        </div>
+
+        <!-- FINANCES -->
+        <div class="tab-panel" id="tab-finances">
+          <div class="grid-2">
+            <article class="card">
+              <h3>Budget</h3>
+              <p class="money" id="finance-budget">$0</p>
+              <ul class="finance-list" id="finance-breakdown"></ul>
+            </article>
+            <article class="card">
+              <h3>Ledger</h3>
+              <div id="finance-ledger" class="ledger"></div>
+            </article>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- PLAYER MODAL -->
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-card" id="modal-body"></div>
+    </div>
+
+    <!-- SEASON END -->
+    <div id="season-modal" class="modal hidden">
+      <div class="modal-card">
+        <h2 id="season-title">Season Complete</h2>
+        <p id="season-summary"></p>
+        <button class="btn btn-primary" id="btn-new-season">Start Next Season</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
